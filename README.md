@@ -1,4 +1,4 @@
-# MCP Assistant (CodeCrunch Demo)
+# MCP Assistant
 
 This is a simple demo application showcasing the use of the **Model Context Protocol (MCP)** with tools and a web-based UI.
 
