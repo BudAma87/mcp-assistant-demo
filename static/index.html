@@ -1,34 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>MCP Assistant</title>
+  <meta charset="UTF-8" />
+  <title>MCP SDK Assistant</title>
+  <script type="module" src="/src/main.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input, select { width: 300px; margin-right: 10px; padding: 5px; }
+    button { padding: 6px 12px; }
+    #response { margin-top: 20px; color: darkgreen; }
+  </style>
 </head>
 <body>
-    <h2>MCP Assistant</h2>
-    <input id="question" placeholder="Ask something..." style="width: 300px;">
-    <button onclick="ask()">Ask</button>
-    <p id="response"></p>
+  <h2>MCP SDK Assistant</h2>
+  <label for="tool">Choose a tool:</label>
+  <select id="tool">
+    <option value="calculator">Calculator</option>
+    <option value="knowledge">Knowledge</option>
+  </select>
+  <br /><br />
+  <input id="inputText" placeholder="Enter expression or term..." />
+  <button onclick="ask()">Ask</button>
+  <p id="response"></p>
 
-    <script>
-        async function ask() {
-            const q = document.getElementById("question").value;
-            let url = "";
+  <script>
+    async function ask() {
+      const tool = document.getElementById("tool").value;
+      const input = document.getElementById("inputText").value;
+      let payload = {};
 
-            if (q.toLowerCase().includes("calculate")) {
-                const expr = q.toLowerCase().replace("calculate", "").trim();
-                url = `/tool/calculate?q=${encodeURIComponent(expr)}`;
-            } else if (q.toLowerCase().includes("what is")) {
-                const term = q.toLowerCase().replace("what is", "").trim();
-                url = `/tool/knowledge?term=${encodeURIComponent(term)}`;
-            } else {
-                document.getElementById("response").textContent = "Sorry, I don't understand.";
-                return;
-            }
+      if (tool === "calculator") {
+        payload = { expression: input };
+      } else if (tool === "knowledge") {
+        payload = { term: input };
+      }
 
-            const res = await fetch(url);
-            const data = await res.json();
-            document.getElementById("response").textContent = data.result;
-        }
-    </script>
+      const res = await fetch(`http://localhost:5003/call/${tool}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+      document.getElementById("response").textContent = "Response: " + data.result;
+    }
+  </script>
 </body>
 </html>
