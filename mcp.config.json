@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "my-local-mcp-assistant": {
+      "description": "Local FastAPI server with MCP tools",
+      "command": "python",
+      "args": [
+        "-m",
+        "uvicorn",
+        "mcp_server:app",
+        "--port",
+        "5003",
+        "--reload"
+      ],
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      },
+      "workingDirectory": "."
+    }
+  }
+}
+
